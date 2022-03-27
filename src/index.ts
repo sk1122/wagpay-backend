@@ -10,7 +10,8 @@ import { paymentIntentRouter } from "./api/payment_intent/router";
 
 dotenv.config();
 
-const PORT: number = parseInt(process.env.PORT as string, 10) | 5000;
+const PORT: number = parseInt(process.env.PORT as string) | 5000;
+console.log(process.env.PORT, PORT)
 const app = express();
 const server = http.createServer(app);
 
@@ -31,6 +32,6 @@ app.use("/api/pages/", pageRouter);
 app.use("/api/submissions/", submissionRouter);
 app.use("/api/paymentIntents/", paymentIntentRouter);
 
-server.listen(PORT, () => {
-  console.log(`Server listening @ ${PORT}`);
+server.listen(process.env.PORT, () => {
+  console.log(`Server listening @ ${process.env.PORT}`);
 });

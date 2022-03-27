@@ -43,7 +43,8 @@ const router_1 = require("./api/pages/router");
 const router_2 = require("./api/submissions/router");
 const router_3 = require("./api/payment_intent/router");
 dotenv.config();
-const PORT = parseInt(process.env.PORT, 10) | 5000;
+const PORT = parseInt(process.env.PORT) | 5000;
+console.log(process.env.PORT, PORT);
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -58,6 +59,6 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 app.use("/api/pages/", router_1.pageRouter);
 app.use("/api/submissions/", router_2.submissionRouter);
 app.use("/api/paymentIntents/", router_3.paymentIntentRouter);
-server.listen(PORT, () => {
-    console.log(`Server listening @ ${PORT}`);
+server.listen(process.env.PORT, () => {
+    console.log(`Server listening @ ${process.env.PORT}`);
 });
