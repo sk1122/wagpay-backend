@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { definitions } from "../../../types";
 import { PrismaClient, User } from "@prisma/client";
-import { supabase } from "../../../../../core/supabase";
 import verifyUser from "../../../middlewares/verifyUser";
 
 class UserController {
