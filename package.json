@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
-    "start": "tsc && node build/src/index.js"
+    "tsc": "tsc",
+    "start": "npm run tsc && node build/src/index.js"
   },
   "keywords": [],
   "author": "",
