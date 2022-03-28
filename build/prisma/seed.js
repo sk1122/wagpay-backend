@@ -16,12 +16,13 @@ const client_1 = require("@prisma/client");
 const pages_1 = __importDefault(require("./../data/pages"));
 const products_1 = __importDefault(require("./../data/products"));
 const submission_1 = __importDefault(require("./../data/submission"));
+const users_1 = __importDefault(require("./../data/users"));
 const prisma = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        // await prisma.user.createMany({
-        //   data: users,
-        // });
+        yield prisma.user.createMany({
+            data: users_1.default,
+        });
         yield prisma.pages.createMany({
             data: pages_1.default,
         });

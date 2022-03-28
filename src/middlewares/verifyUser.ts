@@ -18,6 +18,7 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
 		}
 
 		res.status(401).send(error)
+		return
 	}
 
 	const user = await prisma.user.findFirst({

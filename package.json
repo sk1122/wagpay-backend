@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "tsc": "tsc",
-    "db": "npx prisma migrate deploy",
+    "db": "npx prisma migrate deploy && node build/prisma/seed.js",
     "start": "npm run db && node build/src/index.js"
   },
   "keywords": [],

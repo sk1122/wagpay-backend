@@ -28,6 +28,7 @@ const verifyUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             status: 401
         };
         res.status(401).send(error);
+        return;
     }
     const user = yield prisma.user.findFirst({
         where: {
