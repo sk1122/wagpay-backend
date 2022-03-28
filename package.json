@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "tsc": "tsc",
+    "db": "npx prisma migrate deploy",
     "start": "node build/src/index.js"
   },
   "keywords": [],
