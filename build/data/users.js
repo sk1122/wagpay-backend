@@ -37,6 +37,7 @@ exports.default = [
         email: "fotese8081@siberpay.com",
     },
     {
+        id: "cdb8b172-12c2-453f-ba72-91e755b6cc71",
         username: "satyamm",
         eth_address: "0x444a900d6cc95f8d4568cb6e3096f518b9606294",
         sol_address: "BkHxK8FTeDn2HUva4nc1EBhHbEq54WwhqjQ1AY58g8GZ",
