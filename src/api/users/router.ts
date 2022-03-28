@@ -17,7 +17,7 @@ userRouter.get("/getuser/", (req: Request, res: Response, next: NextFunction) =>
 userRouter.get("/:id", [verifyUser], (req: Request, res: Response) =>
   userController.getUser(req, res)
 );
-userRouter.post("/", [verifyUser], (req: Request, res: Response) =>
+userRouter.post("/", (req: Request, res: Response) =>
   userController.post(req, res)
 );
 userRouter.patch("/", [verifyUser], (req: Request, res: Response) =>

@@ -42,8 +42,15 @@ class PageController {
             res.status(200).send(pages);
         });
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            let pageData = req.body;
+            console.log(req.body);
+            // console.log(JSON.parse(req.body))
+            let _a = req.body, { products } = _a, pageData = __rest(_a, ["products"]);
             pageData.userId = res.locals.user.id;
+            for (let i = 0; i < products.create.length; i++) {
+                products.create[i].userId = res.locals.user.id;
+                console.log(products.create[i].userId, "user");
+            }
+            pageData.products = products;
             try {
                 const slug = yield this.prisma.pages.findFirst({
                     where: {
@@ -51,6 +58,7 @@ class PageController {
                         slug: pageData.slug
                     }
                 });
+                console.log(slug, pageData.slug, "SLUG");
                 if (slug) {
                     res.status(400).send({ error: 'Store already exists with that slug', status: 400 });
                     return;
@@ -59,11 +67,13 @@ class PageController {
             catch (e) { }
             var page;
             try {
+                console.log(pageData, pageData.products);
                 page = yield this.prisma.pages.create({
                     data: pageData
                 });
             }
             catch (e) {
+                console.log(e);
                 res.status(400).send({
                     error: e,
                     status: 400
@@ -90,7 +100,7 @@ class PageController {
             res.status(201).send(pages);
         });
         this.update = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const _a = req.body, { id } = _a, pageData = __rest(_a, ["id"]);
+            const _b = req.body, { id } = _b, pageData = __rest(_b, ["id"]);
             if (Object.keys(pageData).includes('slug')) {
                 try {
                     const slug = yield this.prisma.pages.findFirst({

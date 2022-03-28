@@ -35,6 +35,7 @@ const verifyUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             email: decoded.email
         }
     });
+    console.log(user, decoded);
     res.locals.user = user;
     next();
 });

@@ -18,7 +18,7 @@ const server = http.createServer(app);
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    allowedHeaders: ["Content-Type"],
+    allowedHeaders: ["Content-Type", "bearer-token"],
     origin: ["http://localhost:3000"],
   })
 );
@@ -31,6 +31,7 @@ app.get("/", async (req: Request, res: Response) => {
 app.use("/api/pages/", pageRouter);
 app.use("/api/submissions/", submissionRouter);
 app.use("/api/paymentIntents/", paymentIntentRouter);
+app.use("/api/user/", userRouter);
 
 server.listen(process.env.PORT, () => {
   console.log(`Server listening @ ${process.env.PORT}`);

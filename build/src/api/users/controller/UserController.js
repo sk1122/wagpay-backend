@@ -26,6 +26,7 @@ class UserController {
                     },
                 });
                 res.status(200).send(user);
+                return;
             }
             catch (e) {
                 res.status(400).send({
@@ -36,12 +37,14 @@ class UserController {
         });
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let userData = req.body;
+            console.log(userData);
             userData.is_paid = false;
             try {
                 let user = yield this.prisma.user.create({
                     data: userData,
                 });
                 res.send(201).send(user);
+                return;
             }
             catch (e) {
                 res.status(400).send({
@@ -75,6 +78,7 @@ class UserController {
                     error: e,
                     status: 400,
                 });
+                return;
             }
             res.status(200).send(user);
             next();
@@ -95,6 +99,7 @@ class UserController {
                     error: e,
                     status: 400,
                 });
+                return;
             }
             res.status(201).send(updatedUser);
         });

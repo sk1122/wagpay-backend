@@ -26,6 +26,7 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
 			email: (decoded as JwtPayload).email
 		}
 	})
+	console.log(user, decoded)
 	
 	res.locals.user = user
 

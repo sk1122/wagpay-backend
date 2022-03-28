@@ -40,8 +40,9 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv = __importStar(require("dotenv"));
 const http_1 = __importDefault(require("http"));
 const router_1 = require("./api/pages/router");
-const router_2 = require("./api/submissions/router");
-const router_3 = require("./api/payment_intent/router");
+const router_2 = require("./api/users/router");
+const router_3 = require("./api/submissions/router");
+const router_4 = require("./api/payment_intent/router");
 dotenv.config();
 const PORT = parseInt(process.env.PORT) | 5000;
 console.log(process.env.PORT, PORT);
@@ -49,7 +50,7 @@ const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)({
-    allowedHeaders: ["Content-Type"],
+    allowedHeaders: ["Content-Type", "bearer-token"],
     origin: ["http://localhost:3000"],
 }));
 app.use(express_1.default.json());
@@ -57,8 +58,9 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).send("gm");
 }));
 app.use("/api/pages/", router_1.pageRouter);
-app.use("/api/submissions/", router_2.submissionRouter);
-app.use("/api/paymentIntents/", router_3.paymentIntentRouter);
+app.use("/api/submissions/", router_3.submissionRouter);
+app.use("/api/paymentIntents/", router_4.paymentIntentRouter);
+app.use("/api/user/", router_2.userRouter);
 server.listen(process.env.PORT, () => {
     console.log(`Server listening @ ${process.env.PORT}`);
 });

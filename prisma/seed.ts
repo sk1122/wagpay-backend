@@ -7,21 +7,21 @@ import users from "./../data/users";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.user.createMany({
-    data: users,
+  await prisma.user.create({
+    data: users[0],
   });
 
-  await prisma.pages.createMany({
-    data: pages,
-  });
+ // await prisma.pages.createMany({
+   // data: pages,
+ // });
 
-  await prisma.product.createMany({
-    data: products,
-  });
+ // await prisma.product.createMany({
+   // data: products,
+ // });
 
-  await prisma.submission.createMany({
-    data: submission,
-  });
+ // await prisma.submission.createMany({
+   // data: submission,
+  //});
 }
 
 main()

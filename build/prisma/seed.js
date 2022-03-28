@@ -13,25 +13,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
-const pages_1 = __importDefault(require("./../data/pages"));
-const products_1 = __importDefault(require("./../data/products"));
-const submission_1 = __importDefault(require("./../data/submission"));
 const users_1 = __importDefault(require("./../data/users"));
 const prisma = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield prisma.user.createMany({
-            data: users_1.default,
+        yield prisma.user.create({
+            data: users_1.default[0],
         });
-        yield prisma.pages.createMany({
-            data: pages_1.default,
-        });
-        yield prisma.product.createMany({
-            data: products_1.default,
-        });
-        yield prisma.submission.createMany({
-            data: submission_1.default,
-        });
+        // await prisma.pages.createMany({
+        // data: pages,
+        // });
+        // await prisma.product.createMany({
+        // data: products,
+        // });
+        // await prisma.submission.createMany({
+        // data: submission,
+        //});
     });
 }
 main()

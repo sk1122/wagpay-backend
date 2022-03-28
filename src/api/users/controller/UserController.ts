@@ -21,6 +21,7 @@ class UserController {
       });
 
       res.status(200).send(user);
+      return
     } catch (e) {
       res.status(400).send({
         error: e,
@@ -31,12 +32,14 @@ class UserController {
 
   post = async (req: Request, res: Response) => {
     let userData = req.body;
+    console.log(userData)
     userData.is_paid = false;
     try {
       let user = await this.prisma.user.create({
         data: userData,
       });
       res.send(201).send(user);
+      return
     } catch (e) {
       res.status(400).send({
         error: e,
@@ -69,6 +72,7 @@ class UserController {
         error: e,
         status: 400,
       });
+      return
     }
     res.status(200).send(user as User);
 
@@ -90,6 +94,7 @@ class UserController {
         error: e,
         status: 400,
       });
+      return
     }
     res.status(201).send(updatedUser);
   };
