@@ -33,17 +33,68 @@ class PageController {
         this.prisma = new client_1.PrismaClient();
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const data = {};
-            Object.keys(req.query).map(value => { if (isNumeric(req.query[value]))
+            Object.keys(req.query).map(value => { if (isNumeric(req.query[value]) && value !== 'cursor')
                 data[value] = Number(req.query[value]); });
             let db_query = Object.assign({ userId: res.locals.user.id }, data);
-            const pages = yield this.prisma.pages.findMany({
-                where: db_query
-            });
-            res.status(200).send(pages);
+            var pages = [];
+            try {
+                pages = yield this.prisma.pages.findMany({
+                    take: 20,
+                    skip: 1,
+                    cursor: {
+                        id: Number(req.query.cursor)
+                    },
+                    where: db_query,
+                    orderBy: {
+                        created_at: 'desc'
+                    }
+                });
+            }
+            catch (e) {
+                pages = yield this.prisma.pages.findMany({
+                    take: 20,
+                    where: db_query,
+                    orderBy: {
+                        created_at: 'desc'
+                    }
+                });
+            }
+            const return_data = {
+                data: pages,
+                cursor: pages[pages.length - 1].id
+            };
+            res.status(200).send(return_data);
+        });
+        this.getFromSlug = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            let { slug, username } = req.query;
+            console.log(slug, username);
+            var page;
+            try {
+                page = yield this.prisma.pages.findFirst({
+                    include: {
+                        products: true
+                    },
+                    where: {
+                        user: {
+                            username: username
+                        },
+                        slug: slug
+                    }
+                });
+                console.log(page);
+            }
+            catch (e) {
+                console.log(e);
+                res.status(400).send({
+                    error: e,
+                    status: 400
+                });
+                return;
+            }
+            console.log(page);
+            res.status(200).send(page);
         });
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body);
-            // console.log(JSON.parse(req.body))
             let _a = req.body, { products } = _a, pageData = __rest(_a, ["products"]);
             pageData.userId = res.locals.user.id;
             for (let i = 0; i < products.create.length; i++) {
@@ -51,6 +102,10 @@ class PageController {
                 console.log(products.create[i].userId, "user");
             }
             pageData.products = products;
+            if (!pageData.eth_address)
+                pageData.eth_address = res.locals.user.eth_address;
+            if (!pageData.sol_address)
+                pageData.sol_address = res.locals.user.sol_address;
             try {
                 const slug = yield this.prisma.pages.findFirst({
                     where: {
@@ -67,7 +122,6 @@ class PageController {
             catch (e) { }
             var page;
             try {
-                console.log(pageData, pageData.products);
                 page = yield this.prisma.pages.create({
                     data: pageData
                 });

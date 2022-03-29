@@ -24,11 +24,14 @@
     "@prisma/client": "^3.11.0",
     "@supabase/supabase-js": "^1.30.0",
     "@types/cors": "^2.8.12",
+    "@types/node-fetch": "^2.6.1",
     "cors": "^2.8.5",
+    "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.0",
     "ethers": "^5.5.4",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^3.2.3",
     "uuid-by-string": "^3.0.6",
     "web3-token": "^0.2.7"
   }

@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { Pages, Prisma, PrismaClient } from '@prisma/client'
+// import fetch, { BodyInit } from "node-fetch";
+import fetch from "cross-fetch";
 
 function isNumeric(str: any) {
 	if (typeof str != "string") return false // we only process strings!  
@@ -14,31 +16,91 @@ class PageController {
 
 	get = async (req: Request, res: Response) => {
 		const data = {} as any
-		Object.keys(req.query).map(value => {if(isNumeric(req.query[value])) data[value] = Number(req.query[value])})
+		Object.keys(req.query).map(value => {if(isNumeric(req.query[value]) && value !== 'cursor') data[value] = Number(req.query[value])})
 		
 		let db_query = {
 			userId: res.locals.user.id,
 			...data
 		}
-		
-		const pages = await this.prisma.pages.findMany({
-			where: db_query
-		})
 
-		res.status(200).send(pages)
+		var pages = []
+		
+		try {
+			pages = await this.prisma.pages.findMany({
+				take: 20,
+				skip: 1,
+				cursor: {
+					id: Number(req.query.cursor)
+				},
+				where: db_query,
+				orderBy: {
+					created_at: 'desc'
+				}
+			})
+		} catch (e) {
+			pages = await this.prisma.pages.findMany({
+				take: 20,
+				where: db_query,
+				orderBy: {
+					created_at: 'desc'
+				}
+			})
+		}
+
+		const return_data = {
+			data: pages,
+			cursor: pages[pages.length - 1].id
+		}
+
+		res.status(200).send(return_data)
+	}
+
+	getFromSlug = async (req: Request, res: Response) => {
+		let { slug, username } = req.query
+		console.log(slug, username)
+		var page
+
+		try {
+			page = await this.prisma.pages.findFirst({
+				include: {
+					products: true
+				},
+				where: {
+					user: {
+						username: username as string
+					},
+					slug: slug as string
+				}
+			})
+
+			console.log(page)
+		} catch(e) {
+			console.log(e)
+			res.status(400).send({
+				error: e,
+				status: 400
+			})
+			return
+		}
+
+		console.log(page)
+		res.status(200).send(page)
 	}
 
 	post = async (req: Request, res: Response) => {
-		console.log(req.body)
-		// console.log(JSON.parse(req.body))
 		let { products, ...pageData } = req.body
-		pageData.userId = res.locals.user.id
-			for(let i = 0; i < products.create.length; i++) {
-				products.create[i].userId = res.locals.user.id
-				console.log(products.create[i].userId, "user")
-			}
-			pageData.products = products
 		
+		pageData.userId = res.locals.user.id
+		
+		for(let i = 0; i < products.create.length; i++) {
+			products.create[i].userId = res.locals.user.id
+			console.log(products.create[i].userId, "user")
+		}
+		pageData.products = products
+		
+		if(!pageData.eth_address) pageData.eth_address = res.locals.user.eth_address
+		if(!pageData.sol_address) pageData.sol_address = res.locals.user.sol_address
+
 		try {
 			const slug = await this.prisma.pages.findFirst({
 				where: {
@@ -55,7 +117,6 @@ class PageController {
 
 		var page
 		try {
-			console.log(pageData, pageData.products)
 			page = await this.prisma.pages.create({
 				data: pageData
 			})

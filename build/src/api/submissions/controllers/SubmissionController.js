@@ -33,28 +33,84 @@ class SubmissionController {
         this.prisma = new client_1.PrismaClient();
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const data = {};
-            Object.keys(req.query).map(value => { if (isNumeric(req.query[value]))
+            Object.keys(req.query).map(value => { if (isNumeric(req.query[value]) && value !== 'cursor')
                 data[value] = Number(req.query[value]); });
-            const page_ids = yield this.prisma.pages.findMany({
-                select: {
-                    submissions: true
-                },
-                where: {
-                    userId: res.locals.user.id
-                }
-            });
+            var page_ids = [];
+            try {
+                page_ids = yield this.prisma.pages.findMany({
+                    take: 20,
+                    skip: 1,
+                    cursor: {
+                        id: Number(req.query.cursor)
+                    },
+                    select: {
+                        submissions: {
+                            include: {
+                                page: {
+                                    select: {
+                                        slug: true,
+                                        id: true,
+                                        title: true
+                                    }
+                                },
+                                products: {
+                                    select: {
+                                        name: true,
+                                        discounted_price: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    where: {
+                        userId: res.locals.user.id
+                    }
+                });
+            }
+            catch (e) {
+                page_ids = yield this.prisma.pages.findMany({
+                    take: 20,
+                    select: {
+                        submissions: {
+                            include: {
+                                page: {
+                                    select: {
+                                        slug: true,
+                                        id: true,
+                                        title: true
+                                    }
+                                },
+                                products: {
+                                    select: {
+                                        name: true,
+                                        discounted_price: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    where: {
+                        userId: res.locals.user.id
+                    }
+                });
+            }
             const submissions = page_ids.map(value => value.submissions).flat();
-            res.status(200).send(submissions);
+            const return_data = {
+                cursor: submissions[submissions.length - 1].id,
+                data: submissions
+            };
+            res.status(200).send(return_data);
         });
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let submissionData = req.body;
             var submission;
             try {
                 submission = yield this.prisma.submission.create({
-                    data: submissionData
+                    data: Object.assign({}, submissionData)
                 });
             }
             catch (e) {
+                console.log(e);
                 res.status(400).send({
                     error: e,
                     status: 400

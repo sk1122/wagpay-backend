@@ -72,8 +72,8 @@ model Submission {
   eth_address      String?
   sol_address      String?
   currency         CURRENCY
+  total_prices     Int       @default(0)
   pagesId          Int
-  productId        Int
   transaction_hash String?
   page             Pages    @relation(fields: [pagesId], references: [id])
   products         Product[]
