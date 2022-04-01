@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Pages, Prisma, PrismaClient } from '@prisma/client'
+import PrismaDB from "../../../prisma";
 
 function isNumeric(str: any) {
 	if (typeof str != "string") return false // we only process strings!  
@@ -9,14 +10,13 @@ function isNumeric(str: any) {
 }
   
 
-class SubmissionController {
-	prisma = new PrismaClient();
-
+class SubmissionController extends PrismaDB {
 	get = async (req: Request, res: Response) => {
 		const data = {} as any
 		Object.keys(req.query).map(value => {if(isNumeric(req.query[value]) && value !== 'cursor') data[value] = Number(req.query[value])})
 		
 		var page_ids = []
+		var submissions: any[] = []
 
 		try {
 			page_ids = await this.prisma.pages.findMany({
@@ -48,7 +48,12 @@ class SubmissionController {
 					userId: res.locals.user.id
 				}
 			})
+
+			if(!page_ids) throw "Go Down Bitches"
+			
+			submissions = page_ids.map(value => value.submissions).flat()
 		} catch (e) {
+			console.log(e, "dsa")
 			page_ids = await this.prisma.pages.findMany({
 				take: 20,
 				select: {
@@ -74,16 +79,56 @@ class SubmissionController {
 					userId: res.locals.user.id
 				}
 			})
+			
+			if(!page_ids) {
+				res.status(400).send({
+					error: "Submissions not found",
+					status: 400
+				})
+				return
+			}
+			console.log(page_ids, "page_ids")
+			try {
+				submissions = page_ids.map(value => value.submissions).flat()
+			} catch (e) {
+				console.log(e, "Dasdsadsasad")
+				res.status(400).send({
+					error: e,
+					status: 400
+				})
+				return
+			}
 		}
-		
-		const submissions = page_ids.map(value => value.submissions).flat()
 
 		const return_data = {
 			cursor: submissions[submissions.length - 1].id,
-			data: submissions
+			data: [submissions]
 		}
 
 		res.status(200).send(return_data)
+	}
+
+	getTotalEarned = async (req: Request, res: Response) => {
+		const total_earned = await this.prisma.submission.aggregate({
+			_sum: {
+				total_prices: true
+			},
+			where: {
+				page: {
+					userId: res.locals.user.id
+				}
+			}
+		})
+
+		if(!total_earned) {
+			res.status(400).send({
+				error: "Can't calculate",
+				status: 400
+			})
+			return
+		}
+
+		res.status(200).send(total_earned)
 	}
 
 	post = async (req: Request, res: Response) => {

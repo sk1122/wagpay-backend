@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Pages, Prisma, PrismaClient } from '@prisma/client'
 // import fetch, { BodyInit } from "node-fetch";
 import fetch from "cross-fetch";
+import PrismaDB from "../../../prisma";
 
 function isNumeric(str: any) {
 	if (typeof str != "string") return false // we only process strings!  
@@ -11,9 +12,7 @@ function isNumeric(str: any) {
 }
   
 
-class PageController {
-	prisma = new PrismaClient();
-
+class PageController extends PrismaDB {
 	get = async (req: Request, res: Response) => {
 		const data = {} as any
 		Object.keys(req.query).map(value => {if(isNumeric(req.query[value]) && value !== 'cursor') data[value] = Number(req.query[value])})

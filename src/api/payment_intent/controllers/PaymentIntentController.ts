@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Pages, Prisma, PrismaClient } from '@prisma/client'
+import PrismaDB from "../../../prisma";
 
 function isNumeric(str: any) {
 	if (typeof str != "string") return false // we only process strings!  
@@ -9,8 +10,7 @@ function isNumeric(str: any) {
 }
   
 
-class PaymentIntentController {
-	prisma = new PrismaClient();
+class PaymentIntentController extends PrismaDB {
 
 	get = async (req: Request, res: Response) => {
 		const data = {} as any

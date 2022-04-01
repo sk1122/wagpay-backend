@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { definitions } from "../../../types";
 import { PrismaClient, User } from "@prisma/client";
 import verifyUser from "../../../middlewares/verifyUser";
+import PrismaDB from "../../../prisma";
 
-class UserController {
-  prisma = new PrismaClient();
-
+class UserController extends PrismaDB {
   get = async (req: Request, res: Response) => {
     res.status(200).send(res.locals.user);
   };
+  
   getUser = async (req: Request, res: Response) => {
     let userId: any = req.params.id;
     let user;

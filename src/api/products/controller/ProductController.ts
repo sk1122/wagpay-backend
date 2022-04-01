@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import verifyUser from "../../../middlewares/verifyUser";
 import { supabase } from "./../../../client";
+import PrismaDB from "../../../prisma";
 export interface Product {
   id: number;
   discounted_price: number;
@@ -14,9 +15,7 @@ export interface Product {
   image: File;
 }
 
-class ProductController {
-  prisma = new PrismaClient();
-
+class ProductController extends PrismaDB {
   get = async (req: Request, res: Response) => {
     const id: number = Number(req.query["id"]);
     let product;
@@ -34,6 +33,45 @@ class ProductController {
     }
     res.status(200).send(product);
   };
+
+  getAll = async (req: Request, res: Response) => {
+    const products = await this.prisma.product.findMany({
+      where: {
+        userId: res.locals.user.id
+      }
+    })
+
+    if(!products) {
+      res.status(400).send({
+        error: "Can't find products",
+        status: 4000
+      })
+      return
+    }
+
+    res.status(200).send(products)
+  }
+
+  getTotalProductsSold = async (req: Request, res: Response) => {
+    const total_sold = await this.prisma.product.aggregate({
+      _sum: {
+        sold: true
+      },
+      where: {
+        userId: res.locals.user.id
+      }
+    })
+
+    if(!total_sold) {
+      res.status(400).send({
+        error: "Can't find products",
+        status: 4000
+      })
+      return
+    }
+
+    res.status(200).send(total_sold)
+  }
 
   post = async (req: Request, res: Response) => {
     const producData = req.body;
