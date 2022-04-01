@@ -8,11 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
-class UserController {
+const prisma_1 = __importDefault(require("../../../prisma"));
+class UserController extends prisma_1.default {
     constructor() {
-        this.prisma = new client_1.PrismaClient();
+        super(...arguments);
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             res.status(200).send(res.locals.user);
         });
@@ -26,7 +29,6 @@ class UserController {
                     },
                 });
                 res.status(200).send(user);
-                return;
             }
             catch (e) {
                 res.status(400).send({
@@ -37,14 +39,12 @@ class UserController {
         });
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let userData = req.body;
-            console.log(userData);
-            userData.is_paid = false;
             try {
                 let user = yield this.prisma.user.create({
                     data: userData,
                 });
-                res.send(201).send(user);
-                return;
+                console.log(user);
+                res.status(200).send(user);
             }
             catch (e) {
                 res.status(400).send({
@@ -52,36 +52,6 @@ class UserController {
                     status: 400,
                 });
             }
-        });
-        this.getUserFrom = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            const email = String(req.query["email"]);
-            const username = String(req.query["username"]);
-            let user;
-            try {
-                if (email) {
-                    user = yield this.prisma.user.findFirst({
-                        where: {
-                            email: email,
-                        },
-                    });
-                }
-                else if (username) {
-                    user = yield this.prisma.user.findFirst({
-                        where: {
-                            username: username,
-                        },
-                    });
-                }
-            }
-            catch (e) {
-                res.status(400).send({
-                    error: e,
-                    status: 400,
-                });
-                return;
-            }
-            res.status(200).send(user);
-            next();
         });
         this.update = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userBody = req.body;
@@ -93,34 +63,33 @@ class UserController {
                     },
                     data: userBody,
                 });
+                res.status(201).send(updatedUser);
             }
             catch (e) {
                 res.status(400).send({
                     error: e,
                     status: 400,
                 });
-                return;
             }
-            res.status(201).send(updatedUser);
         });
         this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userId = req.query.id;
-            let user;
             try {
-                user = yield this.prisma.user.delete({
+                yield this.prisma.user.delete({
                     where: {
                         id: userId,
                     },
                 });
+                res.status(204).send({
+                    data: "user deleted",
+                });
             }
             catch (e) {
                 res.status(400).send({
                     error: e,
                     status: 400,
                 });
-                return;
             }
-            res.status(204).send(user);
         });
     }
 }

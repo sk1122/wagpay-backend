@@ -10,6 +10,7 @@ const verifyUser_1 = __importDefault(require("../../middlewares/verifyUser"));
 exports.submissionRouter = (0, express_1.Router)();
 const submissionsController = new SubmissionController_1.default();
 exports.submissionRouter.get("/", [verifyUser_1.default], (req, res) => submissionsController.get(req, res));
+exports.submissionRouter.get("/total_earned", [verifyUser_1.default], (req, res) => submissionsController.getTotalEarned(req, res));
 exports.submissionRouter.post("/", (req, res) => submissionsController.post(req, res));
 exports.submissionRouter.patch("/", [verifyUser_1.default], (req, res) => submissionsController.update(req, res));
 exports.submissionRouter.delete("/", [verifyUser_1.default], (req, res) => submissionsController.delete(req, res));

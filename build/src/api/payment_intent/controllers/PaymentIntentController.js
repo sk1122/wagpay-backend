@@ -19,8 +19,11 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
+const prisma_1 = __importDefault(require("../../../prisma"));
 function isNumeric(str) {
     if (typeof str != "string")
         return false; // we only process strings!  
@@ -28,9 +31,9 @@ function isNumeric(str) {
     return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
         !isNaN(parseFloat(str)); // ...and ensure strings of whitespace fail
 }
-class PaymentIntentController {
+class PaymentIntentController extends prisma_1.default {
     constructor() {
-        this.prisma = new client_1.PrismaClient();
+        super(...arguments);
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const data = {};
             Object.keys(req.query).map(value => { if (isNumeric(req.query[value]))

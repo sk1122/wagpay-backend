@@ -8,11 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
-class ProductController {
+const prisma_1 = __importDefault(require("../../../prisma"));
+class ProductController extends prisma_1.default {
     constructor() {
-        this.prisma = new client_1.PrismaClient();
+        super(...arguments);
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = Number(req.query["id"]);
             let product;
@@ -30,6 +33,39 @@ class ProductController {
                 });
             }
             res.status(200).send(product);
+        });
+        this.getAll = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const products = yield this.prisma.product.findMany({
+                where: {
+                    userId: res.locals.user.id
+                }
+            });
+            if (!products) {
+                res.status(400).send({
+                    error: "Can't find products",
+                    status: 4000
+                });
+                return;
+            }
+            res.status(200).send(products);
+        });
+        this.getTotalProductsSold = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const total_sold = yield this.prisma.product.aggregate({
+                _sum: {
+                    sold: true
+                },
+                where: {
+                    userId: res.locals.user.id
+                }
+            });
+            if (!total_sold) {
+                res.status(400).send({
+                    error: "Can't find products",
+                    status: 4000
+                });
+                return;
+            }
+            res.status(200).send(total_sold);
         });
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const producData = req.body;
