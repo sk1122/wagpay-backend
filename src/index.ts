@@ -8,6 +8,7 @@ import { userRouter } from "./api/users/router";
 import { submissionRouter } from "./api/submissions/router";
 import { paymentIntentRouter } from "./api/payment_intent/router";
 import { productRouter } from "./api/products/routes";
+import { invoiceRouter } from "./api/invoices/router";
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use("/api/submissions/", submissionRouter);
 app.use("/api/paymentIntents/", paymentIntentRouter);
 app.use("/api/user/", userRouter);
 app.use("/api/products/", productRouter);
+app.use("/api/invoices/", invoiceRouter);
 
 server.listen(process.env.PORT, () => {
   console.log(`Server listening @ ${process.env.PORT}`);

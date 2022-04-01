@@ -39,6 +39,7 @@ model Product {
   userId           String
   user             User         @relation(fields: [userId], references: [id])
   Submission       Submission[]
+  invoices         Invoice[]
 }
 
 model Pages {
@@ -60,6 +61,7 @@ model Pages {
   submissions         Submission[]
   products            Product[] 
   payment_intents     PaymentIntent[]
+  invoices            Invoice[]
 }
 
 model Submission {
@@ -77,6 +79,7 @@ model Submission {
   transaction_hash String?
   page             Pages    @relation(fields: [pagesId], references: [id])
   products         Product[]
+  invoice          Invoice?
 }
 
 model PaymentIntent {
@@ -89,4 +92,24 @@ model PaymentIntent {
   from_email       String
   currency         CURRENCY[]
   created_at       DateTime @default(now())
+}
+
+model Invoice {
+  id                    String     @id @default(uuid())
+  value                 Float
+  discount              Float
+  Tax                   Float
+  submissionId          Int?
+  submission            Submission? @relation(fields: [submissionId], references: [id])
+  name                  String
+  address               String?
+  supported_currencies  CURRENCY[]
+  pageId                Int
+  page                  Pages      @relation(fields: [pageId], references: [id])
+  products              Product[]
+  extra_products        Json
+  due_date              DateTime
+  notes                 String?
+  email                 String?
+  created_at            DateTime   @default(now())
 }
