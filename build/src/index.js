@@ -44,6 +44,7 @@ const router_2 = require("./api/users/router");
 const router_3 = require("./api/submissions/router");
 const router_4 = require("./api/payment_intent/router");
 const routes_1 = require("./api/products/routes");
+const router_5 = require("./api/invoices/router");
 dotenv.config();
 const PORT = parseInt(process.env.PORT) | 5000;
 console.log(process.env.PORT, PORT);
@@ -63,6 +64,7 @@ app.use("/api/submissions/", router_3.submissionRouter);
 app.use("/api/paymentIntents/", router_4.paymentIntentRouter);
 app.use("/api/user/", router_2.userRouter);
 app.use("/api/products/", routes_1.productRouter);
+app.use("/api/invoices/", router_5.invoiceRouter);
 server.listen(process.env.PORT, () => {
     console.log(`Server listening @ ${process.env.PORT}`);
 });

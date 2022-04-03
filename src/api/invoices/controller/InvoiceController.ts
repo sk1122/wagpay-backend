@@ -24,17 +24,25 @@ class InvoiceController extends PrismaDB {
 			}
 		})
 		
-		res.status(200).send(paymentIntent)
+		let return_data = {
+			cursor: paymentIntent[paymentIntent.length - 1].id,
+			data: paymentIntent
+		}
+
+		res.status(200).send(return_data)
 	}
 
 	getById = async (req: Request, res: Response) => {
 		const paymentIntent = await this.prisma.invoice.findMany({
 			where: {
 				id: req.query.id as string
+			},
+			include: {
+				products: true
 			}
 		})
 		
-		res.status(200).send(paymentIntent)
+		res.status(200).send(paymentIntent[0])
 	}
 
 	post = async (req: Request, res: Response) => {
