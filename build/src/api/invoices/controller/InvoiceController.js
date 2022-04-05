@@ -46,7 +46,7 @@ class InvoiceController extends prisma_1.default {
                 }
             });
             let return_data = {
-                cursor: paymentIntent[paymentIntent.length - 1].id,
+                cursor: 0,
                 data: paymentIntent
             };
             res.status(200).send(return_data);

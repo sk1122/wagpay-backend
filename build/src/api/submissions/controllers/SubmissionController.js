@@ -122,7 +122,7 @@ class SubmissionController extends prisma_1.default {
                 }
             }
             const return_data = {
-                cursor: submissions[submissions.length - 1].id,
+                cursor: 0,
                 data: [submissions]
             };
             res.status(200).send(return_data);

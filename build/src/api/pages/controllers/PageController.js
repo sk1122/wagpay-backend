@@ -64,7 +64,7 @@ class PageController extends prisma_1.default {
             }
             const return_data = {
                 data: pages,
-                cursor: pages[pages.length - 1].id
+                cursor: 0
             };
             res.status(200).send(return_data);
         });
