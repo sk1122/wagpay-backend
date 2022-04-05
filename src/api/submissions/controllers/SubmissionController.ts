@@ -101,7 +101,7 @@ class SubmissionController extends PrismaDB {
 		}
 
 		const return_data = {
-			cursor: submissions[submissions.length - 1]?.id,
+			cursor: 0,
 			data: [submissions]
 		}
 

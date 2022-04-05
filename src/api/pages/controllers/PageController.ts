@@ -48,7 +48,7 @@ class PageController extends PrismaDB {
 
 		const return_data = {
 			data: pages,
-			cursor: pages[pages.length - 1]?.id
+			cursor: 0
 		}
 
 		res.status(200).send(return_data)
