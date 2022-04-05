@@ -25,7 +25,7 @@ class InvoiceController extends PrismaDB {
 		})
 		
 		let return_data = {
-			cursor: paymentIntent[paymentIntent.length - 1].id,
+			cursor: paymentIntent[paymentIntent.length - 1]?.id,
 			data: paymentIntent
 		}
 
