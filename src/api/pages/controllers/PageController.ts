@@ -77,7 +77,7 @@ class PageController extends PrismaDB {
 			console.log(e)
 			res.status(400).send({
 				error: e,
-				status: 400
+				status: 401
 			})
 			return
 		}
