@@ -41,6 +41,8 @@ class UserController {
                         email: email
                     }
                 });
+                if (!user)
+                    throw "User doesn't exists";
                 res.status(200).send(user);
             }
             catch (e) {
