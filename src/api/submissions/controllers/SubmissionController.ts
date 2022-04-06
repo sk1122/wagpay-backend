@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Pages, Prisma, PrismaClient } from '@prisma/client'
-import PrismaDB from "../../../prisma";
+import { prisma } from "../../../index";
 
 function isNumeric(str: any) {
 	if (typeof str != "string") return false // we only process strings!  
@@ -10,7 +10,7 @@ function isNumeric(str: any) {
 }
   
 
-class SubmissionController extends PrismaDB {
+class SubmissionController {
 	get = async (req: Request, res: Response) => {
 		const data = {} as any
 		Object.keys(req.query).map(value => {if(isNumeric(req.query[value]) && value !== 'cursor') data[value] = Number(req.query[value])})
@@ -19,7 +19,7 @@ class SubmissionController extends PrismaDB {
 		var submissions: any[] = []
 
 		try {
-			page_ids = await this.prisma.pages.findMany({
+			page_ids = await prisma.pages.findMany({
 				take: 20,
 				skip: 1,
 				cursor: {
@@ -54,7 +54,7 @@ class SubmissionController extends PrismaDB {
 			submissions = page_ids.map(value => value.submissions).flat()
 		} catch (e) {
 			console.log(e, "dsa")
-			page_ids = await this.prisma.pages.findMany({
+			page_ids = await prisma.pages.findMany({
 				take: 20,
 				select: {
 					submissions: {
@@ -109,7 +109,7 @@ class SubmissionController extends PrismaDB {
 	}
 
 	getTotalEarned = async (req: Request, res: Response) => {
-		const total_earned = await this.prisma.submission.aggregate({
+		const total_earned = await prisma.submission.aggregate({
 			_sum: {
 				total_prices: true
 			},
@@ -136,7 +136,7 @@ class SubmissionController extends PrismaDB {
 
 		var submission
 		try {
-			submission = await this.prisma.submission.create({
+			submission = await prisma.submission.create({
 				data: {
 					...submissionData
 				}
@@ -159,7 +159,7 @@ class SubmissionController extends PrismaDB {
 		var submissions
 
 		try {
-			submissions = await this.prisma.submission.createMany({
+			submissions = await prisma.submission.createMany({
 				data: pageData
 			})
 		} catch (e) {
@@ -178,7 +178,7 @@ class SubmissionController extends PrismaDB {
 
 		var submission
 		try {
-			submission = await this.prisma.submission.update({
+			submission = await prisma.submission.update({
 				where: {
 					id: id
 				},
@@ -200,7 +200,7 @@ class SubmissionController extends PrismaDB {
 		var submission
 
 		try {
-			submission = await this.prisma.submission.delete({
+			submission = await prisma.submission.delete({
 				where: {
 					id: Number(id)
 				}

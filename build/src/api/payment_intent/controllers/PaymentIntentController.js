@@ -19,11 +19,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = __importDefault(require("../../../prisma"));
+const index_1 = require("../../../index");
 function isNumeric(str) {
     if (typeof str != "string")
         return false; // we only process strings!  
@@ -31,14 +28,13 @@ function isNumeric(str) {
     return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
         !isNaN(parseFloat(str)); // ...and ensure strings of whitespace fail
 }
-class PaymentIntentController extends prisma_1.default {
+class PaymentIntentController {
     constructor() {
-        super(...arguments);
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const data = {};
             Object.keys(req.query).map(value => { if (isNumeric(req.query[value]))
                 data[value] = Number(req.query[value]); });
-            const paymentIntent = yield this.prisma.paymentIntent.findMany({
+            const paymentIntent = yield index_1.prisma.paymentIntent.findMany({
                 where: {
                     page: {
                         userId: res.locals.user.id
@@ -51,7 +47,7 @@ class PaymentIntentController extends prisma_1.default {
             let paymentIntentData = req.body;
             var paymentIntent;
             try {
-                paymentIntent = yield this.prisma.paymentIntent.create({
+                paymentIntent = yield index_1.prisma.paymentIntent.create({
                     data: paymentIntentData
                 });
             }
@@ -68,7 +64,7 @@ class PaymentIntentController extends prisma_1.default {
             const paymentIntentData = req.body;
             var paymentIntent;
             try {
-                paymentIntent = yield this.prisma.paymentIntent.createMany({
+                paymentIntent = yield index_1.prisma.paymentIntent.createMany({
                     data: paymentIntentData
                 });
             }
@@ -85,7 +81,7 @@ class PaymentIntentController extends prisma_1.default {
             const _a = req.body, { id } = _a, paymentIntentData = __rest(_a, ["id"]);
             var paymentIntent;
             try {
-                paymentIntent = yield this.prisma.paymentIntent.update({
+                paymentIntent = yield index_1.prisma.paymentIntent.update({
                     where: {
                         id: id
                     },
@@ -105,7 +101,7 @@ class PaymentIntentController extends prisma_1.default {
             const { id } = req.query;
             var paymentIntent;
             try {
-                paymentIntent = yield this.prisma.paymentIntent.delete({
+                paymentIntent = yield index_1.prisma.paymentIntent.delete({
                     where: {
                         id: id
                     }

@@ -1,6 +1,6 @@
+import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
-import { Prisma } from '@prisma/client'
-import PrismaDB from "../../../prisma";
+import { prisma } from "../../../index";
 
 function isNumeric(str: any) {
 	if (typeof str != "string") return false // we only process strings!  
@@ -10,13 +10,13 @@ function isNumeric(str: any) {
 }
   
 
-class InvoiceController extends PrismaDB {
+class InvoiceController {
 
 	get = async (req: Request, res: Response) => {
 		const data = {} as any
 		Object.keys(req.query).map(value => {if(isNumeric(req.query[value])) data[value] = Number(req.query[value])})
 		
-		const paymentIntent = await this.prisma.invoice.findMany({
+		const paymentIntent = await prisma.invoice.findMany({
 			where: {
 				page: {
 					userId: res.locals.user.id
@@ -33,7 +33,7 @@ class InvoiceController extends PrismaDB {
 	}
 
 	getById = async (req: Request, res: Response) => {
-		const paymentIntent = await this.prisma.invoice.findMany({
+		const paymentIntent = await prisma.invoice.findMany({
 			where: {
 				id: req.query.id as string
 			},
@@ -50,7 +50,7 @@ class InvoiceController extends PrismaDB {
 
 		var invoice
 		try {
-			invoice = await this.prisma.invoice.create({
+			invoice = await prisma.invoice.create({
 				data: invoiceData
 			})
 		} catch (e) {
@@ -71,7 +71,7 @@ class InvoiceController extends PrismaDB {
 		var invoice
 
 		try {
-			invoice = await this.prisma.invoice.createMany({
+			invoice = await prisma.invoice.createMany({
 				data: invoiceData
 			})
 		} catch (e) {
@@ -90,7 +90,7 @@ class InvoiceController extends PrismaDB {
 
 		var invoice
 		try {
-			invoice = await this.prisma.invoice.update({
+			invoice = await prisma.invoice.update({
 				where: {
 					id: id
 				},
@@ -112,7 +112,7 @@ class InvoiceController extends PrismaDB {
 		var invoice
 
 		try {
-			invoice = await this.prisma.invoice.delete({
+			invoice = await prisma.invoice.delete({
 				where: {
 					id: id as string
 				}

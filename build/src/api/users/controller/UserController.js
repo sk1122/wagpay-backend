@@ -8,14 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = __importDefault(require("../../../prisma"));
-class UserController extends prisma_1.default {
+const index_1 = require("../../../index");
+class UserController {
     constructor() {
-        super(...arguments);
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             res.status(200).send(res.locals.user);
         });
@@ -23,7 +19,7 @@ class UserController extends prisma_1.default {
             let userId = req.params.id;
             let user;
             try {
-                user = yield this.prisma.user.findFirst({
+                user = yield index_1.prisma.user.findFirst({
                     where: {
                         id: userId,
                     },
@@ -40,7 +36,7 @@ class UserController extends prisma_1.default {
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let userData = req.body;
             try {
-                let user = yield this.prisma.user.create({
+                let user = yield index_1.prisma.user.create({
                     data: userData,
                 });
                 console.log(user);
@@ -57,7 +53,7 @@ class UserController extends prisma_1.default {
             const userBody = req.body;
             let updatedUser;
             try {
-                updatedUser = yield this.prisma.user.update({
+                updatedUser = yield index_1.prisma.user.update({
                     where: {
                         id: res.locals.user.id,
                     },
@@ -75,7 +71,7 @@ class UserController extends prisma_1.default {
         this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userId = req.query.id;
             try {
-                yield this.prisma.user.delete({
+                yield index_1.prisma.user.delete({
                     where: {
                         id: userId,
                     },

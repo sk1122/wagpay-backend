@@ -8,19 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = __importDefault(require("../../../prisma"));
-class ProductController extends prisma_1.default {
+const index_1 = require("../../../index");
+class ProductController {
     constructor() {
-        super(...arguments);
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = Number(req.query["id"]);
             let product;
             try {
-                product = yield this.prisma.product.findFirst({
+                product = yield index_1.prisma.product.findFirst({
                     where: {
                         id: id,
                     },
@@ -35,7 +31,7 @@ class ProductController extends prisma_1.default {
             res.status(200).send(product);
         });
         this.getAll = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const products = yield this.prisma.product.findMany({
+            const products = yield index_1.prisma.product.findMany({
                 where: {
                     userId: res.locals.user.id
                 }
@@ -50,7 +46,7 @@ class ProductController extends prisma_1.default {
             res.status(200).send(products);
         });
         this.getTotalProductsSold = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const total_sold = yield this.prisma.product.aggregate({
+            const total_sold = yield index_1.prisma.product.aggregate({
                 _sum: {
                     sold: true
                 },
@@ -71,7 +67,7 @@ class ProductController extends prisma_1.default {
             const producData = req.body;
             let product;
             try {
-                product = yield this.prisma.product.create({
+                product = yield index_1.prisma.product.create({
                     data: producData,
                 });
             }
@@ -88,7 +84,7 @@ class ProductController extends prisma_1.default {
             const productData = JSON.parse(req.body);
             let updatedProduct;
             try {
-                updatedProduct = yield this.prisma.product.update({
+                updatedProduct = yield index_1.prisma.product.update({
                     where: {
                         id: productId,
                     },
@@ -107,7 +103,7 @@ class ProductController extends prisma_1.default {
             const { id } = req.query;
             let product;
             try {
-                product = yield this.prisma.product.delete({
+                product = yield index_1.prisma.product.delete({
                     where: {
                         id: Number(id),
                     },

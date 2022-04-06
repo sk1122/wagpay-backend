@@ -19,11 +19,9 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = __importDefault(require("../../../prisma"));
+// import fetch, { BodyInit } from "node-fetch";
+const index_1 = require("../../../index");
 function isNumeric(str) {
     if (typeof str != "string")
         return false; // we only process strings!  
@@ -31,9 +29,8 @@ function isNumeric(str) {
     return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
         !isNaN(parseFloat(str)); // ...and ensure strings of whitespace fail
 }
-class PageController extends prisma_1.default {
+class PageController {
     constructor() {
-        super(...arguments);
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const data = {};
             Object.keys(req.query).map(value => { if (isNumeric(req.query[value]) && value !== 'cursor')
@@ -41,7 +38,7 @@ class PageController extends prisma_1.default {
             let db_query = Object.assign({ userId: res.locals.user.id }, data);
             var pages = [];
             try {
-                pages = yield this.prisma.pages.findMany({
+                pages = yield index_1.prisma.pages.findMany({
                     take: 20,
                     skip: 1,
                     cursor: {
@@ -54,7 +51,7 @@ class PageController extends prisma_1.default {
                 });
             }
             catch (e) {
-                pages = yield this.prisma.pages.findMany({
+                pages = yield index_1.prisma.pages.findMany({
                     take: 20,
                     where: db_query,
                     orderBy: {
@@ -73,7 +70,7 @@ class PageController extends prisma_1.default {
             console.log(slug, username);
             var page;
             try {
-                page = yield this.prisma.pages.findFirst({
+                page = yield index_1.prisma.pages.findFirst({
                     include: {
                         products: true
                     },
@@ -90,7 +87,7 @@ class PageController extends prisma_1.default {
                 console.log(e);
                 res.status(400).send({
                     error: e,
-                    status: 400
+                    status: 401
                 });
                 return;
             }
@@ -110,7 +107,7 @@ class PageController extends prisma_1.default {
             if (!pageData.sol_address)
                 pageData.sol_address = res.locals.user.sol_address;
             try {
-                const slug = yield this.prisma.pages.findFirst({
+                const slug = yield index_1.prisma.pages.findFirst({
                     where: {
                         userId: res.locals.user.id,
                         slug: pageData.slug
@@ -125,7 +122,7 @@ class PageController extends prisma_1.default {
             catch (e) { }
             var page;
             try {
-                page = yield this.prisma.pages.create({
+                page = yield index_1.prisma.pages.create({
                     data: pageData
                 });
             }
@@ -143,7 +140,7 @@ class PageController extends prisma_1.default {
             const pageData = req.body;
             var pages;
             try {
-                pages = yield this.prisma.pages.createMany({
+                pages = yield index_1.prisma.pages.createMany({
                     data: pageData
                 });
             }
@@ -160,7 +157,7 @@ class PageController extends prisma_1.default {
             const _b = req.body, { id } = _b, pageData = __rest(_b, ["id"]);
             if (Object.keys(pageData).includes('slug')) {
                 try {
-                    const slug = yield this.prisma.pages.findFirst({
+                    const slug = yield index_1.prisma.pages.findFirst({
                         where: {
                             userId: res.locals.user.id,
                             slug: pageData.slug
@@ -175,7 +172,7 @@ class PageController extends prisma_1.default {
             }
             var page;
             try {
-                page = yield this.prisma.pages.update({
+                page = yield index_1.prisma.pages.update({
                     where: {
                         id: id
                     },
@@ -195,7 +192,7 @@ class PageController extends prisma_1.default {
             const { id } = req.query;
             var page;
             try {
-                page = yield this.prisma.pages.delete({
+                page = yield index_1.prisma.pages.delete({
                     where: {
                         id: Number(id)
                     }

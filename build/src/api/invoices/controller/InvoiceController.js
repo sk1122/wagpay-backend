@@ -19,11 +19,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const prisma_1 = __importDefault(require("../../../prisma"));
+const index_1 = require("../../../index");
 function isNumeric(str) {
     if (typeof str != "string")
         return false; // we only process strings!  
@@ -31,14 +28,13 @@ function isNumeric(str) {
     return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
         !isNaN(parseFloat(str)); // ...and ensure strings of whitespace fail
 }
-class InvoiceController extends prisma_1.default {
+class InvoiceController {
     constructor() {
-        super(...arguments);
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const data = {};
             Object.keys(req.query).map(value => { if (isNumeric(req.query[value]))
                 data[value] = Number(req.query[value]); });
-            const paymentIntent = yield this.prisma.invoice.findMany({
+            const paymentIntent = yield index_1.prisma.invoice.findMany({
                 where: {
                     page: {
                         userId: res.locals.user.id
@@ -52,7 +48,7 @@ class InvoiceController extends prisma_1.default {
             res.status(200).send(return_data);
         });
         this.getById = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const paymentIntent = yield this.prisma.invoice.findMany({
+            const paymentIntent = yield index_1.prisma.invoice.findMany({
                 where: {
                     id: req.query.id
                 },
@@ -66,7 +62,7 @@ class InvoiceController extends prisma_1.default {
             let invoiceData = req.body;
             var invoice;
             try {
-                invoice = yield this.prisma.invoice.create({
+                invoice = yield index_1.prisma.invoice.create({
                     data: invoiceData
                 });
             }
@@ -84,7 +80,7 @@ class InvoiceController extends prisma_1.default {
             const invoiceData = req.body;
             var invoice;
             try {
-                invoice = yield this.prisma.invoice.createMany({
+                invoice = yield index_1.prisma.invoice.createMany({
                     data: invoiceData
                 });
             }
@@ -101,7 +97,7 @@ class InvoiceController extends prisma_1.default {
             const _a = req.body, { id } = _a, invoiceData = __rest(_a, ["id"]);
             var invoice;
             try {
-                invoice = yield this.prisma.invoice.update({
+                invoice = yield index_1.prisma.invoice.update({
                     where: {
                         id: id
                     },
@@ -121,7 +117,7 @@ class InvoiceController extends prisma_1.default {
             const { id } = req.query;
             var invoice;
             try {
-                invoice = yield this.prisma.invoice.delete({
+                invoice = yield index_1.prisma.invoice.delete({
                     where: {
                         id: id
                     }

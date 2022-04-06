@@ -1,8 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
-import verifyUser from "../../../middlewares/verifyUser";
-import { supabase } from "./../../../client";
-import PrismaDB from "../../../prisma";
+import { prisma } from "../../../index";
 export interface Product {
   id: number;
   discounted_price: number;
@@ -15,12 +12,12 @@ export interface Product {
   image: File;
 }
 
-class ProductController extends PrismaDB {
+class ProductController {
   get = async (req: Request, res: Response) => {
     const id: number = Number(req.query["id"]);
     let product;
     try {
-      product = await this.prisma.product.findFirst({
+      product = await prisma.product.findFirst({
         where: {
           id: id,
         },
@@ -35,7 +32,7 @@ class ProductController extends PrismaDB {
   };
 
   getAll = async (req: Request, res: Response) => {
-    const products = await this.prisma.product.findMany({
+    const products = await prisma.product.findMany({
       where: {
         userId: res.locals.user.id
       }
@@ -53,7 +50,7 @@ class ProductController extends PrismaDB {
   }
 
   getTotalProductsSold = async (req: Request, res: Response) => {
-    const total_sold = await this.prisma.product.aggregate({
+    const total_sold = await prisma.product.aggregate({
       _sum: {
         sold: true
       },
@@ -77,7 +74,7 @@ class ProductController extends PrismaDB {
     const producData = req.body;
     let product;
     try {
-      product = await this.prisma.product.create({
+      product = await prisma.product.create({
         data: producData,
       });
     } catch (e) {
@@ -94,7 +91,7 @@ class ProductController extends PrismaDB {
     const productData: any = JSON.parse(req.body) as Product;
     let updatedProduct;
     try {
-      updatedProduct = await this.prisma.product.update({
+      updatedProduct = await prisma.product.update({
         where: {
           id: productId,
         },
@@ -113,7 +110,7 @@ class ProductController extends PrismaDB {
     let product;
 
     try {
-      product = await this.prisma.product.delete({
+      product = await prisma.product.delete({
         where: {
           id: Number(id),
         },

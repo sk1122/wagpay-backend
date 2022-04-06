@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { Pages, Prisma, PrismaClient } from '@prisma/client'
 // import fetch, { BodyInit } from "node-fetch";
-import fetch from "cross-fetch";
-import PrismaDB from "../../../prisma";
+import { prisma } from "../../../index";
 
 function isNumeric(str: any) {
 	if (typeof str != "string") return false // we only process strings!  
@@ -12,7 +11,7 @@ function isNumeric(str: any) {
 }
   
 
-class PageController extends PrismaDB {
+class PageController {
 	get = async (req: Request, res: Response) => {
 		const data = {} as any
 		Object.keys(req.query).map(value => {if(isNumeric(req.query[value]) && value !== 'cursor') data[value] = Number(req.query[value])})
@@ -25,7 +24,7 @@ class PageController extends PrismaDB {
 		var pages = []
 		
 		try {
-			pages = await this.prisma.pages.findMany({
+			pages = await prisma.pages.findMany({
 				take: 20,
 				skip: 1,
 				cursor: {
@@ -37,7 +36,7 @@ class PageController extends PrismaDB {
 				}
 			})
 		} catch (e) {
-			pages = await this.prisma.pages.findMany({
+			pages = await prisma.pages.findMany({
 				take: 20,
 				where: db_query,
 				orderBy: {
@@ -60,7 +59,7 @@ class PageController extends PrismaDB {
 		var page
 
 		try {
-			page = await this.prisma.pages.findFirst({
+			page = await prisma.pages.findFirst({
 				include: {
 					products: true
 				},
@@ -101,7 +100,7 @@ class PageController extends PrismaDB {
 		if(!pageData.sol_address) pageData.sol_address = res.locals.user.sol_address
 
 		try {
-			const slug = await this.prisma.pages.findFirst({
+			const slug = await prisma.pages.findFirst({
 				where: {
 					userId: res.locals.user.id,
 					slug: pageData.slug
@@ -116,7 +115,7 @@ class PageController extends PrismaDB {
 
 		var page
 		try {
-			page = await this.prisma.pages.create({
+			page = await prisma.pages.create({
 				data: pageData
 			})
 		} catch (e) {
@@ -137,7 +136,7 @@ class PageController extends PrismaDB {
 		var pages
 
 		try {
-			pages = await this.prisma.pages.createMany({
+			pages = await prisma.pages.createMany({
 				data: pageData
 			})
 		} catch (e) {
@@ -156,7 +155,7 @@ class PageController extends PrismaDB {
 
 		if(Object.keys(pageData).includes('slug')) {
 			try {
-				const slug = await this.prisma.pages.findFirst({
+				const slug = await prisma.pages.findFirst({
 					where: {
 						userId: res.locals.user.id,
 						slug: pageData.slug
@@ -171,7 +170,7 @@ class PageController extends PrismaDB {
 
 		var page
 		try {
-			page = await this.prisma.pages.update({
+			page = await prisma.pages.update({
 				where: {
 					id: id
 				},
@@ -193,7 +192,7 @@ class PageController extends PrismaDB {
 		var page
 
 		try {
-			page = await this.prisma.pages.delete({
+			page = await prisma.pages.delete({
 				where: {
 					id: Number(id)
 				}

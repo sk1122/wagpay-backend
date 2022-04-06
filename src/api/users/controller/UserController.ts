@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { definitions } from "../../../types";
-import { PrismaClient, User } from "@prisma/client";
-import verifyUser from "../../../middlewares/verifyUser";
-import PrismaDB from "../../../prisma";
+import { prisma } from "../../../index";
 
-class UserController extends PrismaDB {
+class UserController {
   get = async (req: Request, res: Response) => {
     res.status(200).send(res.locals.user);
   };
@@ -13,7 +10,7 @@ class UserController extends PrismaDB {
     let userId: any = req.params.id;
     let user;
     try {
-      user = await this.prisma.user.findFirst({
+      user = await prisma.user.findFirst({
         where: {
           id: userId,
         },
@@ -30,7 +27,7 @@ class UserController extends PrismaDB {
   post = async (req: Request, res: Response) => {
     let userData = req.body;
     try {
-      let user = await this.prisma.user.create({
+      let user = await prisma.user.create({
         data: userData,
       });
       console.log(user);
@@ -47,7 +44,7 @@ class UserController extends PrismaDB {
     const userBody = req.body;
     let updatedUser;
     try {
-      updatedUser = await this.prisma.user.update({
+      updatedUser = await prisma.user.update({
         where: {
           id: res.locals.user.id,
         },
@@ -66,7 +63,7 @@ class UserController extends PrismaDB {
     const userId: any = req.query.id as string;
 
     try {
-      await this.prisma.user.delete({
+      await prisma.user.delete({
         where: {
           id: userId,
         },

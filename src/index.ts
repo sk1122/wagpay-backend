@@ -9,8 +9,11 @@ import { submissionRouter } from "./api/submissions/router";
 import { paymentIntentRouter } from "./api/payment_intent/router";
 import { productRouter } from "./api/products/routes";
 import { invoiceRouter } from "./api/invoices/router";
+import { PrismaClient } from "@prisma/client";
 
 dotenv.config();
+
+export const prisma = new PrismaClient();
 
 const PORT: number = parseInt(process.env.PORT as string) | 5000;
 console.log(process.env.PORT, PORT)

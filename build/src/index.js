@@ -35,6 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.prisma = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv = __importStar(require("dotenv"));
@@ -45,7 +46,9 @@ const router_3 = require("./api/submissions/router");
 const router_4 = require("./api/payment_intent/router");
 const routes_1 = require("./api/products/routes");
 const router_5 = require("./api/invoices/router");
+const client_1 = require("@prisma/client");
 dotenv.config();
+exports.prisma = new client_1.PrismaClient();
 const PORT = parseInt(process.env.PORT) | 5000;
 console.log(process.env.PORT, PORT);
 const app = (0, express_1.default)();

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Pages, Prisma, PrismaClient } from '@prisma/client'
-import PrismaDB from "../../../prisma";
+import { prisma } from "../../../index";
 
 function isNumeric(str: any) {
 	if (typeof str != "string") return false // we only process strings!  
@@ -10,13 +10,13 @@ function isNumeric(str: any) {
 }
   
 
-class PaymentIntentController extends PrismaDB {
+class PaymentIntentController {
 
 	get = async (req: Request, res: Response) => {
 		const data = {} as any
 		Object.keys(req.query).map(value => {if(isNumeric(req.query[value])) data[value] = Number(req.query[value])})
 		
-		const paymentIntent = await this.prisma.paymentIntent.findMany({
+		const paymentIntent = await prisma.paymentIntent.findMany({
 			where: {
 				page: {
 					userId: res.locals.user.id
@@ -32,7 +32,7 @@ class PaymentIntentController extends PrismaDB {
 
 		var paymentIntent
 		try {
-			paymentIntent = await this.prisma.paymentIntent.create({
+			paymentIntent = await prisma.paymentIntent.create({
 				data: paymentIntentData
 			})
 		} catch (e) {
@@ -52,7 +52,7 @@ class PaymentIntentController extends PrismaDB {
 		var paymentIntent
 
 		try {
-			paymentIntent = await this.prisma.paymentIntent.createMany({
+			paymentIntent = await prisma.paymentIntent.createMany({
 				data: paymentIntentData
 			})
 		} catch (e) {
@@ -71,7 +71,7 @@ class PaymentIntentController extends PrismaDB {
 
 		var paymentIntent
 		try {
-			paymentIntent = await this.prisma.paymentIntent.update({
+			paymentIntent = await prisma.paymentIntent.update({
 				where: {
 					id: id
 				},
@@ -93,7 +93,7 @@ class PaymentIntentController extends PrismaDB {
 		var paymentIntent
 
 		try {
-			paymentIntent = await this.prisma.paymentIntent.delete({
+			paymentIntent = await prisma.paymentIntent.delete({
 				where: {
 					id: id as string
 				}
