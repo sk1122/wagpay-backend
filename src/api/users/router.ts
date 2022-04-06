@@ -13,12 +13,17 @@ userRouter.get("/", [verifyUser], (req: Request, res: Response) =>
 userRouter.get("/:id", [verifyUser], (req: Request, res: Response) =>
   userController.getUser(req, res)
 );
+
+userRouter.get('/email/:email', (req: Request, res: Response) => userController.getSafeUserByEmail(req, res))
+
 userRouter.post("/", (req: Request, res: Response) =>
   userController.post(req, res)
 );
+
 userRouter.patch("/", [verifyUser], (req: Request, res: Response) =>
   userController.update(req, res)
 );
+
 userRouter.delete("/", [verifyUser], (req: Request, res: Response) =>
   userController.delete(req, res)
 );

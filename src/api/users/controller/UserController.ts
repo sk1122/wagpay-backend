@@ -24,6 +24,25 @@ class UserController {
     }
   };
 
+  getSafeUserByEmail = async (req: Request, res: Response) => {
+    let email = req.params.email
+
+    try {
+      let user = await prisma.user.findFirst({
+        where: {
+          email: email
+        }
+      })
+      res.status(200).send(user)
+    } catch (e) {
+      console.log(e)
+      res.status(400).send({
+        error: e,
+        status: 400
+      })
+    }
+  }
+
   post = async (req: Request, res: Response) => {
     let userData = req.body;
     try {
