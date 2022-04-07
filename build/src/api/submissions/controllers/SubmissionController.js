@@ -21,6 +21,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../../index");
+const webhook_1 = require("../../../utils/webhook");
 function isNumeric(str) {
     if (typeof str != "string")
         return false; // we only process strings!  
@@ -148,7 +149,14 @@ class SubmissionController {
             var submission;
             try {
                 submission = yield index_1.prisma.submission.create({
-                    data: Object.assign({}, submissionData)
+                    data: Object.assign({}, submissionData),
+                    include: {
+                        page: {
+                            include: {
+                                user: true
+                            }
+                        }
+                    },
                 });
             }
             catch (e) {
@@ -159,6 +167,21 @@ class SubmissionController {
                 });
                 return;
             }
+            (0, webhook_1.send_webhook_data)(submission.pagesId, {
+                "embeds": [
+                    {
+                        "title": `$${submission.total_prices} Payment Received from ${submission.email} to ${submission.currency === 'solana' ? submission.page.sol_address : submission.page.eth_address}`,
+                        "description": `Your store - ${submission.page.title} received payment \n\n You can check transaction here - ${submission.currency === 'solana' ? `https://solscan.io/tx/${submission.transaction_hash}` : `https://etherscan.io/tx/${submission.transaction_hash}`}`,
+                        "color": 5814783
+                    }
+                ]
+            });
+            (0, webhook_1.send_email)(submission.pagesId, {
+                to: submission.page.user.email,
+                from: 'hello@bayze.in',
+                subject: `$${submission.total_prices} Payment Received from ${submission.email} to ${submission.currency === 'solana' ? submission.page.sol_address : submission.page.eth_address}`,
+                text: `Your store - ${submission.page.title} received payment \n\n You can check transaction here - ${submission.currency === 'solana' ? `https://solscan.io/tx/${submission.transaction_hash}` : `https://etherscan.io/tx/${submission.transaction_hash}`}`
+            });
             res.status(201).send(submission);
         });
         this.batch = (req, res) => __awaiter(this, void 0, void 0, function* () {
