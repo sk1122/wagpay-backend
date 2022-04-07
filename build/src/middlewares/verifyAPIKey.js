@@ -12,7 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyAPIKey = void 0;
 const __1 = require("..");
 const verifyAPIKey = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const api_key = req.params.api_key;
+    const api_key = req.headers.api_key;
+    console.log(api_key);
     const user = yield __1.prisma.user.findFirst({
         where: {
             apiKey: api_key

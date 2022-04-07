@@ -13,14 +13,16 @@ function isNumeric(str: any) {
 class PaymentIntentController {
 
 	get = async (req: Request, res: Response) => {
-		const data = {} as any
-		Object.keys(req.query).map(value => {if(isNumeric(req.query[value])) data[value] = Number(req.query[value])})
+		const data = req.query
 		
+		console.log(res.locals.user.id, data)
+
 		const paymentIntent = await prisma.paymentIntent.findMany({
 			where: {
 				page: {
 					userId: res.locals.user.id
-				}
+				},
+				...data
 			}
 		})
 		
@@ -36,6 +38,7 @@ class PaymentIntentController {
 				data: paymentIntentData
 			})
 		} catch (e) {
+			console.log(e)
 			res.status(400).send({
 				error: e,
 				status: 400

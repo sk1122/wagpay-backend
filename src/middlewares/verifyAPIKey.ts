@@ -2,11 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import { prisma } from "..";
 
 export const verifyAPIKey = async (req: Request, res: Response, next: NextFunction) => {
-	const api_key = req.params.api_key
+	const api_key = req.headers.api_key
+	console.log(api_key)
 	
 	const user = await prisma.user.findFirst({
 		where: {
-			apiKey: api_key
+			apiKey: api_key as string
 		}
 	})
 

@@ -31,15 +31,12 @@ function isNumeric(str) {
 class PaymentIntentController {
     constructor() {
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const data = {};
-            Object.keys(req.query).map(value => { if (isNumeric(req.query[value]))
-                data[value] = Number(req.query[value]); });
+            const data = req.query;
+            console.log(res.locals.user.id, data);
             const paymentIntent = yield index_1.prisma.paymentIntent.findMany({
-                where: {
-                    page: {
+                where: Object.assign({ page: {
                         userId: res.locals.user.id
-                    }
-                }
+                    } }, data)
             });
             res.status(200).send(paymentIntent);
         });
@@ -52,6 +49,7 @@ class PaymentIntentController {
                 });
             }
             catch (e) {
+                console.log(e);
                 res.status(400).send({
                     error: e,
                     status: 400
