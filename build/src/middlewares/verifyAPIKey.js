@@ -10,7 +10,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyAPIKey = void 0;
+const __1 = require("..");
 const verifyAPIKey = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const api_key = req.params.api_key;
+    const user = yield __1.prisma.user.findFirst({
+        where: {
+            apiKey: api_key
+        }
+    });
+    if (!user) {
+        res.status(400).send({
+            error: "Can't find User",
+            status: 400
+        });
+        return;
+    }
+    res.locals.user = user;
     next();
 });
 exports.verifyAPIKey = verifyAPIKey;
