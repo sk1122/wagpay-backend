@@ -12,6 +12,7 @@ const userController = new UserController_1.default();
 exports.userRouter.get("/", [verifyUser_1.default], (req, res) => userController.get(req, res));
 exports.userRouter.get("/:id", [verifyUser_1.default], (req, res) => userController.getUser(req, res));
 exports.userRouter.get('/email/:email', (req, res) => userController.getSafeUserByEmail(req, res));
+exports.userRouter.get('/apiKey/:apiKey', (req, res) => userController.getUserByApiKey(req, res));
 exports.userRouter.post("/", (req, res) => userController.post(req, res));
 exports.userRouter.patch("/", [verifyUser_1.default], (req, res) => userController.update(req, res));
 exports.userRouter.delete("/", [verifyUser_1.default], (req, res) => userController.delete(req, res));

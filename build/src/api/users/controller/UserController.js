@@ -53,6 +53,26 @@ class UserController {
                 });
             }
         });
+        this.getUserByApiKey = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            let apiKey = req.params.apiKey;
+            try {
+                let user = yield index_1.prisma.user.findFirst({
+                    where: {
+                        apiKey: apiKey
+                    }
+                });
+                if (!user)
+                    throw "User doesn't exists";
+                res.status(200).send(user);
+            }
+            catch (e) {
+                console.log(e);
+                res.status(400).send({
+                    error: e,
+                    status: 400
+                });
+            }
+        });
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let userData = req.body;
             try {

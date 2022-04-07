@@ -22,6 +22,7 @@ model User {
   is_paid     Boolean?
   created_at  DateTime  @default(now())
   email       String?
+  apiKey      String?
   Pages       Pages[]
   Product     Product[]
 }

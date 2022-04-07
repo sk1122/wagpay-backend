@@ -31,3 +31,32 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+  // {
+  //   "embeds": [
+  //     {
+  //       "title": "Your store has been created",
+  //       "description": "its not good tho",
+  //       "color": 16763904
+  //     },
+  //     {
+  //       "title": "You received a order from ray6969@69.69",
+  //       "description": "don't get too happy, just $0.1",
+  //       "color": 16763904,
+  //       "fields": [
+  //         {
+  //           "name": "Product 1",
+  //           "value": "Don't sell drugs on our platform"
+  //         },
+  //         {
+  //           "name": "ray69",
+  //           "value": "Why sell your username??"
+  //         },
+  //         {
+  //           "name": "v3n0m",
+  //           "value": "x"
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // }

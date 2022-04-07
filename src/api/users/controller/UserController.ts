@@ -46,6 +46,28 @@ class UserController {
     }
   }
 
+  getUserByApiKey = async (req: Request, res: Response) => {
+    let apiKey = req.params.apiKey as string
+
+    try {
+      let user = await prisma.user.findFirst({
+        where: {
+          apiKey: apiKey
+        }
+      })
+     
+      if(!user) throw "User doesn't exists"
+
+      res.status(200).send(user)
+    } catch (e) {
+      console.log(e)
+      res.status(400).send({
+        error: e,
+        status: 400
+      })
+    }
+  }
+
   post = async (req: Request, res: Response) => {
     let userData = req.body;
     try {
