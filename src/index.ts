@@ -23,8 +23,8 @@ const server = http.createServer(app);
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    allowedHeaders: ["Content-Type", "bearer-token"],
-    origin: ["http://localhost:3000"],
+    allowedHeaders: ["Content-Type", "bearer-token", "api_key"],
+    origin: ["http://localhost:3000", "https://wagpay.xyz"],
   })
 );
 app.use(express.json());

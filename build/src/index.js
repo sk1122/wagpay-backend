@@ -55,8 +55,8 @@ const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)({
-    allowedHeaders: ["Content-Type", "bearer-token"],
-    origin: ["http://localhost:3000"],
+    allowedHeaders: ["Content-Type", "bearer-token", "api_key"],
+    origin: ["http://localhost:3000", "https://wagpay.xyz"],
 }));
 app.use(express_1.default.json());
 app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
