@@ -65,9 +65,26 @@ class PageController {
             };
             res.status(200).send(return_data);
         });
+        this.getTotalVisits = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const visits = yield index_1.prisma.pages.aggregate({
+                _sum: {
+                    visits: true
+                },
+                where: {
+                    userId: res.locals.user.id
+                }
+            });
+            if (!visits) {
+                res.status(400).send({
+                    error: "You don't have any stores",
+                    status: 400
+                });
+                return;
+            }
+            res.status(200).send(visits);
+        });
         this.getFromSlug = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let { slug, username } = req.query;
-            console.log(slug, username);
             var page;
             try {
                 page = yield index_1.prisma.pages.findFirst({

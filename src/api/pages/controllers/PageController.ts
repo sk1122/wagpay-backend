@@ -53,9 +53,30 @@ class PageController {
 		res.status(200).send(return_data)
 	}
 
+	getTotalVisits = async (req: Request, res: Response) => {
+		const visits = await prisma.pages.aggregate({
+			_sum: {
+				visits: true
+			},
+			where: {
+				userId: res.locals.user.id
+			}
+		})
+
+		if(!visits) {
+			res.status(400).send({
+				error: "You don't have any stores",
+				status: 400
+			})
+			return
+		}
+
+		res.status(200).send(visits)
+	}
+
 	getFromSlug = async (req: Request, res: Response) => {
 		let { slug, username } = req.query
-		console.log(slug, username)
+		
 		var page
 
 		try {

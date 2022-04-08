@@ -11,6 +11,7 @@ exports.pageRouter = (0, express_1.Router)();
 const pagesController = new PageController_1.default();
 exports.pageRouter.get("/", [verifyUser_1.default], (req, res) => pagesController.get(req, res));
 exports.pageRouter.get("/get/", (req, res) => pagesController.getFromSlug(req, res));
+exports.pageRouter.get("/total_visits/", [verifyUser_1.default], (req, res) => pagesController.getTotalVisits(req, res));
 exports.pageRouter.post("/", [verifyUser_1.default], (req, res) => pagesController.post(req, res));
 exports.pageRouter.patch("/", [verifyUser_1.default], (req, res) => pagesController.update(req, res));
 exports.pageRouter.delete("/", [verifyUser_1.default], (req, res) => pagesController.delete(req, res));
