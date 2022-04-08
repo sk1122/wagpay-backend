@@ -53,6 +53,7 @@ const PORT = parseInt(process.env.PORT) | 5000;
 console.log(process.env.PORT, PORT);
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
+app.use(express_1.default.static('files'));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)({
     allowedHeaders: ["Content-Type", "bearer-token", "api_key"],

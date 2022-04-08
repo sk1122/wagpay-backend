@@ -20,6 +20,7 @@ console.log(process.env.PORT, PORT)
 const app = express();
 const server = http.createServer(app);
 
+app.use(express.static('files'))
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
