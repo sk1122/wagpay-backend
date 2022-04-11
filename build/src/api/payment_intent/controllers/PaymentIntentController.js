@@ -40,6 +40,22 @@ class PaymentIntentController {
             });
             res.status(200).send(paymentIntent);
         });
+        this.getSingleIntent = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
+            const paymentIntent = yield index_1.prisma.paymentIntent.findFirst({
+                where: {
+                    id: id
+                }
+            });
+            if (!paymentIntent) {
+                res.status(400).send({
+                    error: "Intent Doesn't Exists",
+                    status: 400
+                });
+                return;
+            }
+            res.status(200).send(paymentIntent);
+        });
         this.post = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let paymentIntentData = req.body;
             var paymentIntent;

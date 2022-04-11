@@ -29,6 +29,26 @@ class PaymentIntentController {
 		res.status(200).send(paymentIntent)
 	}
 
+	getSingleIntent = async (req: Request, res: Response) => {
+		const id = req.params.id
+
+		const paymentIntent = await prisma.paymentIntent.findFirst({
+			where: {
+				id: id
+			}
+		})
+
+		if(!paymentIntent) {
+			res.status(400).send({
+				error: "Intent Doesn't Exists",
+				status: 400
+			})
+			return
+		}
+		
+		res.status(200).send(paymentIntent)
+	}
+
 	post = async (req: Request, res: Response) => {
 		let paymentIntentData = req.body
 
