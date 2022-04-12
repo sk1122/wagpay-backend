@@ -77,8 +77,9 @@ class UserController {
       console.log(user);
       res.status(200).send(user);
     } catch (e) {
+      console.log(e)
       res.status(400).send({
-        error: e,
+        error: JSON.stringify(e),
         status: 400,
       });
     }

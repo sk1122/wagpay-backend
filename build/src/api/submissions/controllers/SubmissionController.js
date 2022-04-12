@@ -93,9 +93,6 @@ class SubmissionController {
                                 }
                             }
                         }
-                    },
-                    where: {
-                        userId: res.locals.user.id
                     }
                 });
                 if (!page_ids) {
@@ -120,7 +117,7 @@ class SubmissionController {
             }
             const return_data = {
                 cursor: 0,
-                data: [submissions]
+                data: submissions
             };
             res.status(200).send(return_data);
         });

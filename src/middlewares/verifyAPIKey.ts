@@ -3,13 +3,22 @@ import { prisma } from "..";
 
 export const verifyAPIKey = async (req: Request, res: Response, next: NextFunction) => {
 	const api_key = req.headers.api_key
-	console.log(api_key)
 	
-	const user = await prisma.user.findFirst({
+	if(!api_key) {
+		res.status(400).send({
+			error: "Please send api_key",
+			status: 400
+		})
+		return
+	}
+	
+	const user = await prisma.user.findUnique({
 		where: {
 			apiKey: api_key as string
 		}
 	})
+
+	console.log(user)
 
 	if(!user) {
 		res.status(400).send({

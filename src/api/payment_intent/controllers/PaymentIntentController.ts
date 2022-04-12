@@ -35,6 +35,9 @@ class PaymentIntentController {
 		const paymentIntent = await prisma.paymentIntent.findFirst({
 			where: {
 				id: id
+			},
+			include: {
+				page: true
 			}
 		})
 

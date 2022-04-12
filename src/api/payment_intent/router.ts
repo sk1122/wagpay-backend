@@ -21,5 +21,5 @@ export const apiKeyOrUser = (req: Request, res: Response, next: NextFunction) =>
 paymentIntentRouter.get("/", apiKeyOrUser, (req: Request, res: Response) => paymentIntentController.get(req, res))
 paymentIntentRouter.get("/:id", (req: Request, res: Response) => paymentIntentController.getSingleIntent(req, res))
 paymentIntentRouter.post("/", [verifyAPIKey], (req: Request, res: Response) => paymentIntentController.post(req, res))
-paymentIntentRouter.patch("/", [verifyUser], (req: Request, res: Response) => paymentIntentController.update(req, res))
+paymentIntentRouter.patch("/", (req: Request, res: Response) => paymentIntentController.update(req, res))
 paymentIntentRouter.delete("/", [verifyUser], (req: Request, res: Response) => paymentIntentController.delete(req, res))

@@ -13,12 +13,19 @@ exports.verifyAPIKey = void 0;
 const __1 = require("..");
 const verifyAPIKey = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const api_key = req.headers.api_key;
-    console.log(api_key);
-    const user = yield __1.prisma.user.findFirst({
+    if (!api_key) {
+        res.status(400).send({
+            error: "Please send api_key",
+            status: 400
+        });
+        return;
+    }
+    const user = yield __1.prisma.user.findUnique({
         where: {
             apiKey: api_key
         }
     });
+    console.log(user);
     if (!user) {
         res.status(400).send({
             error: "Can't find User",

@@ -45,6 +45,9 @@ class PaymentIntentController {
             const paymentIntent = yield index_1.prisma.paymentIntent.findFirst({
                 where: {
                     id: id
+                },
+                include: {
+                    page: true
                 }
             });
             if (!paymentIntent) {
