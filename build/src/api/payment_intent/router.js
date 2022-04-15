@@ -15,7 +15,7 @@ const apiKeyOrUser = (req, res, next) => {
     if (list.includes('bearer-token')) {
         return (0, verifyUser_1.default)(req, res, next);
     }
-    else if (list.includes('api_key')) {
+    else if (list.includes('api-key')) {
         return (0, verifyAPIKey_1.verifyAPIKey)(req, res, next);
     }
     else {

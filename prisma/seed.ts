@@ -7,9 +7,9 @@ import users from "./../data/users";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.user.create({
-    data: users[0],
-  });
+// await prisma.user.create({
+//  data: users[0],
+//});
 
  // await prisma.pages.createMany({
    // data: pages,

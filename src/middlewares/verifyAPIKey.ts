@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { prisma } from "..";
 
 export const verifyAPIKey = async (req: Request, res: Response, next: NextFunction) => {
-	const api_key = req.headers.api_key
+	const api_key = req.headers["api-key"]
+	console.log(api_key, "api_key")
 	
 	if(!api_key) {
 		res.status(400).send({

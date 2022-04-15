@@ -11,7 +11,7 @@ export const apiKeyOrUser = (req: Request, res: Response, next: NextFunction) =>
 	const list = Object.keys(req.headers)
 	if(list.includes('bearer-token')) {
 		return verifyUser(req, res, next)
-	} else if (list.includes('api_key')) {
+	} else if (list.includes('api-key')) {
 		return verifyAPIKey(req, res, next)
 	} else {
 		throw "Either add bearer-token or api_key"

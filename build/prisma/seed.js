@@ -14,8 +14,8 @@ const prisma = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         // await prisma.user.create({
-        //   data: users[0],
-        // });
+        //  data: users[0],
+        //});
         // await prisma.pages.createMany({
         // data: pages,
         // });

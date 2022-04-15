@@ -12,7 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyAPIKey = void 0;
 const __1 = require("..");
 const verifyAPIKey = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const api_key = req.headers.api_key;
+    const api_key = req.headers["api-key"];
+    console.log(api_key, "api_key");
     if (!api_key) {
         res.status(400).send({
             error: "Please send api_key",
