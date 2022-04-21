@@ -24,7 +24,7 @@ app.use(express.static('files'))
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    allowedHeaders: ["Content-Type", "bearer-token", "api_key"],
+    allowedHeaders: ["Content-Type", "bearer-token", "api-key"],
     origin: ["http://localhost:3000", "https://wagpay.xyz"],
   })
 );
