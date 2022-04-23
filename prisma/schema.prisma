@@ -10,8 +10,10 @@ datasource db {
 enum CURRENCY {
   solana
   ethereum
+  matic
   usdcsol
   usdceth
+  usdcmatic
 }
 
 model User {
