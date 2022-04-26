@@ -7,7 +7,7 @@ export const verifyAPIKey = async (req: Request, res: Response, next: NextFuncti
 	
 	if(!api_key) {
 		res.status(400).send({
-			error: "Please send api_key",
+			error: "Please send api-key",
 			status: 400
 		})
 		return

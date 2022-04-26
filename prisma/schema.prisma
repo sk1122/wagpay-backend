@@ -27,6 +27,7 @@ model User {
   apiKey      String   
   Pages       Pages[]
   Product     Product[]
+  intents     PaymentIntent[]
 
   @@unique([apiKey])
   @@unique([username])
@@ -68,7 +69,6 @@ model Pages {
   user                User         @relation(fields: [userId], references: [id])
   submissions         Submission[]
   products            Product[] 
-  payment_intents     PaymentIntent[]
   invoices            Invoice[]
 }
 
@@ -83,22 +83,28 @@ model Submission {
   sol_address      String?
   currency         CURRENCY
   total_prices     Int       @default(0)
-  pagesId          Int
+  pagesId          Int?
   transaction_hash String?
-  page             Pages    @relation(fields: [pagesId], references: [id])
+  page             Pages?    @relation(fields: [pagesId], references: [id])
   products         Product[]
   invoice          Invoice?
 }
 
 model PaymentIntent {
   id               String    @id @default(uuid())
-  value            Int
+  value            Float
   transaction_hash String
   is_paid          Boolean @default(false)
-  pagesId          Int
-  page             Pages    @relation(fields: [pagesId], references: [id]) 
-  from_email       String
+  title            String
+  description      String
+  products         Json?
+  from_data        Json?
+  orderId          String
+  webhook_urls     String[]
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
   currency         CURRENCY[]
+  time             Int      @default(0)
   created_at       DateTime @default(now())
 }
 

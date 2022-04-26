@@ -19,9 +19,7 @@ class PaymentIntentController {
 
 		const paymentIntent = await prisma.paymentIntent.findMany({
 			where: {
-				page: {
-					userId: res.locals.user.id
-				},
+				userId: res.locals.user.id,
 				...data
 			}
 		})
@@ -35,9 +33,6 @@ class PaymentIntentController {
 		const paymentIntent = await prisma.paymentIntent.findFirst({
 			where: {
 				id: id
-			},
-			include: {
-				page: true
 			}
 		})
 
@@ -58,7 +53,10 @@ class PaymentIntentController {
 		var paymentIntent
 		try {
 			paymentIntent = await prisma.paymentIntent.create({
-				data: paymentIntentData
+				data: {
+					...paymentIntentData,
+					userId: res.locals.user.id
+				}
 			})
 		} catch (e) {
 			console.log(e)
@@ -73,8 +71,13 @@ class PaymentIntentController {
 	}
 
 	batch = async (req: Request, res: Response) => {
-		const paymentIntentData: Prisma.Enumerable<Prisma.PaymentIntentCreateManyInput> = req.body
+		let intent = req.body
+		let user = {
+			connect: [{id: res.locals.user.id}]
+		}
 
+		let paymentIntentData = { ...intent, user }
+		
 		var paymentIntent
 
 		try {

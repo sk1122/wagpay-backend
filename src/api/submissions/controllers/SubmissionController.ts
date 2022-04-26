@@ -156,22 +156,27 @@ class SubmissionController {
 			return
 		}
 
-		send_webhook_data(submission.pagesId, {
-			"embeds": [
-				{
-				  "title": `$${submission.total_prices} Payment Received from ${submission.email} to ${submission.currency === 'solana' ? submission.page.sol_address : submission.page.eth_address}`,
-				  "description": `Your store - ${submission.page.title} received payment \n\n You can check transaction here - ${submission.currency === 'solana' ? `https://solscan.io/tx/${submission.transaction_hash}` : `https://etherscan.io/tx/${submission.transaction_hash}`}`,
-				  "color": 5814783
-				}
-			]
-		})
+		if(submission.pagesId && submission.page) {
+			send_webhook_data(submission.pagesId, {
+				"embeds": [
+					{
+					  "title": `$${submission.total_prices} Payment Received from ${submission.email} to ${submission.currency === 'solana' ? submission.page.sol_address : submission.page.eth_address}`,
+					  "description": `Your store - ${submission.page.title} received payment \n\n You can check transaction here - ${submission.currency === 'solana' ? `https://solscan.io/tx/${submission.transaction_hash}` : `https://etherscan.io/tx/${submission.transaction_hash}`}`,
+					  "color": 5814783
+					}
+				]
+			})
 
-		send_email(submission.pagesId, {
-			to: submission.page.user.email as string,
-			from: 'hello@bayze.in',
-			subject: `$${submission.total_prices} Payment Received from ${submission.email} to ${submission.currency === 'solana' ? submission.page.sol_address : submission.page.eth_address}`,
-			text: `Your store - ${submission.page.title} received payment \n\n You can check transaction here - ${submission.currency === 'solana' ? `https://solscan.io/tx/${submission.transaction_hash}` : `https://etherscan.io/tx/${submission.transaction_hash}`}`
-		})
+			send_email(submission.pagesId, {
+				to: submission.page.user.email as string,
+				from: 'hello@bayze.in',
+				subject: `$${submission.total_prices} Payment Received from ${submission.email} to ${submission.currency === 'solana' ? submission.page.sol_address : submission.page.eth_address}`,
+				text: `Your store - ${submission.page.title} received payment \n\n You can check transaction here - ${submission.currency === 'solana' ? `https://solscan.io/tx/${submission.transaction_hash}` : `https://etherscan.io/tx/${submission.transaction_hash}`}`
+			})
+		} else {
+			
+		}
+
 
 		res.status(201).send(submission)
 	}
