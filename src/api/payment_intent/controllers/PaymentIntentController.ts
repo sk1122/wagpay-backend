@@ -107,6 +107,7 @@ class PaymentIntentController {
 				data: paymentIntentData
 			})
 		} catch (e) {
+			console.log(e)
 			res.status(400).send({
 				error: e,
 				status: 400

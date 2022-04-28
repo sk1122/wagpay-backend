@@ -104,6 +104,8 @@ model PaymentIntent {
   userId           String
   user             User     @relation(fields: [userId], references: [id])
   currency         CURRENCY[]
+  eth_address      String?
+  sol_address      String?
   time             Int      @default(0)
   created_at       DateTime @default(now())
 }
