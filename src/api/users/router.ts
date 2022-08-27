@@ -16,7 +16,7 @@ userRouter.get("/:id", [verifyUser], (req: Request, res: Response) =>
 
 userRouter.get('/email/:email', (req: Request, res: Response) => userController.getSafeUserByEmail(req, res))
 userRouter.get('/apiKey/:apiKey', (req: Request, res: Response) => userController.getUserByApiKey(req, res))
-userRouter.get('/check_username/:username', (req: Request, res: Response) => userController.getUserByUsername(req, res))
+userRouter.get('/check_username/:username', (req: Request, res: Response) => userController.getSafeUserByUsername(req, res))
 
 userRouter.post("/", (req: Request, res: Response) =>
   userController.post(req, res)
